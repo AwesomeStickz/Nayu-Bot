@@ -14,7 +14,7 @@ export const run = async (client: Client, message: Message): Promise<Message | v
         for (const linkInfo of linksMatched) {
             const link = linkInfo[0].toLowerCase();
 
-            if (!allowedLinks.filter((allowedLink) => link.match(new RegExp(`https?:\/\/(.*\.)?${allowedLink}(/.*)?$`)) && true).length && !message.member?.roles.includes('766720686504542248') && !message.member?.roles.includes('854711580385083403')) {
+            if (!allowedLinks.filter((allowedLink) => link.match(new RegExp(`https?:\/\/(.*\.)?${allowedLink}(/.*)?$`)) && true).length && !message.member?.roles.includes('766720686504542248') && !message.member?.roles.includes('854711580385083403') && message.channel.parentID !== '1004750438102474762') {
                 await message.delete();
 
                 message.channel.createMessage(`${message.author.mention}, don't send links here! ${emojis.angryCat}`).then((msg) => setTimeout(() => msg.delete(), 3000));
