@@ -7,6 +7,7 @@ export const run = async (client: Client, message: Message): Promise<Message | v
     if (message.channel instanceof PrivateChannel || !message.channel || !message.channel.guild) return;
 
     if (message.channel.guild.id === '530095394785329154') {
+        // Link Filters
         const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
         const linksMatched = message.content.matchAll(linkRegex);
         const allowedLinks = ['giveawayboat.com', 'giveaway.boats', 'discord.com', 'discord.media', 'discordapp.com', 'discordapp.net', 'discordstatus.com', 'tenor.com', 'giphy.com'];
@@ -19,7 +20,22 @@ export const run = async (client: Client, message: Message): Promise<Message | v
 
                 message.channel.createMessage(`${message.author.mention}, don't send links here! ${emojis.angryCat}`).then((msg) => setTimeout(() => msg.delete(), 3000));
 
-                return;
+                break;
+            }
+        }
+
+        // Attachment Filters
+        if (message.attachments) {
+            const allowedAttachments = ['audio', 'image', 'video'];
+
+            for (const attachment of message.attachments) {
+                if (!allowedAttachments.find((allowedAttachment) => attachment.content_type?.startsWith(allowedAttachment))) {
+                    await message.delete();
+
+                    message.channel.createMessage(`${message.author.mention}, we don't allow any attachments except audio, image, video in this server!`).then((msg) => setTimeout(() => msg.delete(), 7500));
+
+                    break;
+                }
             }
         }
     }
