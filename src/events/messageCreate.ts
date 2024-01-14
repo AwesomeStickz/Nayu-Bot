@@ -12,7 +12,7 @@ export const run = async (client: Client, message: Message): Promise<Message | v
             // Link Filters
             const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
             const linksMatched = message.content.matchAll(linkRegex);
-            const allowedLinks = ['giveawayboat.com', 'giveaway.boats', 'discord.com', 'discord.media', 'discordapp.com', 'discordapp.net', 'discordstatus.com', 'tenor.com', 'giphy.com'];
+            const allowedLinks = ['giveaway.boats', 'discord.com', 'discord.media', 'discordapp.com', 'discordapp.net', 'discordstatus.com', 'tenor.com', 'giphy.com'];
 
             for (const linkInfo of linksMatched) {
                 const link = linkInfo[0].toLowerCase();
