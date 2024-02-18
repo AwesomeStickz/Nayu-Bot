@@ -7,8 +7,8 @@ export const run = async (client: Client, message: Message): Promise<Message | v
     if (message.channel instanceof PrivateChannel || !message.channel || !message.channel.guild) return;
 
     if (message.channel.guild.id === '530095394785329154') {
-        // Exception to Support and Message Perms roles, and Tickets category
-        if (!message.member?.roles.includes('766720686504542248') && !message.member?.roles.includes('854711580385083403') && message.channel.parentID !== '1004750438102474762') {
+        // Exception to Support and Message Perms roles, Tickets category and Supporters Chat channel
+        if (!message.member?.roles.includes('766720686504542248') && !message.member?.roles.includes('854711580385083403') && message.channel.parentID !== '1004750438102474762' && message.channel.id !== '903670998287679510') {
             // Link Filters
             const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
             const linksMatched = message.content.matchAll(linkRegex);
