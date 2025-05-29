@@ -1,7 +1,5 @@
-import { Client } from 'eris';
+import { client } from '../nayu.js';
 
-export const run = async (client: Client) => {
-    const Ready = [`--------------------------------------------------------`, `Ready since :  ${new Date().toUTCString()}`, `Bot         :  ${client.user!.username}`, `Members     :  ${client.guilds.reduce((acc, guild) => acc + guild.memberCount, 0).toLocaleString()}`, `Servers     :  ${client.guilds.size.toLocaleString()}`, `--------------------------------------------------------`].join('\n');
-
-    console.log(`[Ready]\n${Ready}`);
+export const run: typeof client.events.ready = async () => {
+    console.log('[Ready]\tNayu is ready!');
 };

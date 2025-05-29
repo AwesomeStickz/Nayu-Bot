@@ -1,10 +1,11 @@
-import { Client, Message } from 'eris';
-import { emojis } from '../utils/emojis';
+import { client } from '../nayu.js';
+import { emojis } from '../utils/emojis.js';
+import { CommandFile } from '../utils/typings/commandFileInterfaces.js';
 
-export const run = async (message: Message, client: Client) => {
-    const pingMessage = await message.channel.createMessage(`${emojis.typing} Pinging...`);
+export const run: CommandFile['run'] = async (message) => {
+    const pingMessage = await client.helpers.sendMessage(message.channelId, { content: `${emojis.typing} Pinging...` });
 
-    pingMessage.edit(`Pong! \`${(pingMessage.editedTimestamp || pingMessage.createdAt) - (message.editedTimestamp || message.createdAt)}ms\`\nHeartbeat: \`${Math.round(client.guilds.get(message.guildID!)!.shard.latency)}ms\``);
+    client.helpers.editMessage(pingMessage.channelId, pingMessage.id, { content: `Pong! \`${(pingMessage.editedTimestamp || pingMessage.timestamp) - (message.editedTimestamp || message.timestamp)}ms\`\nHeartbeat: \`${Math.round(client.gateway.shards.get(0)?.heart.rtt || 0)}ms\`` });
 };
 
 export const help = {

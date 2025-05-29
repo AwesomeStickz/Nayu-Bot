@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "target": "es2019",
-        "module": "commonjs",
-        "lib": ["ESNext"],
-        "allowJs": true,
+        "target": "ES2023",
+        "module": "NodeNext",
+        "lib": ["ES2023"],
+        "allowJs": false,
         "outDir": "./dist",
         "importHelpers": true,
 
@@ -18,13 +18,14 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
 
-        "moduleResolution": "node",
+        "moduleResolution": "NodeNext",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
 
         "pretty": true,
 
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "useUnknownInCatchVariables": false
     }
 }

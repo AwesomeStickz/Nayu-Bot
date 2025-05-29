@@ -1,5 +1,5 @@
-import { Client, Guild, Member } from 'eris';
+import { client } from '../nayu.js';
 
-export const run = async (_client: Client, _guild: Guild, newMember: Member, _oldMember: { roles: string[] } | null) => {
-    if (!newMember.pending && !newMember.roles.includes('530109367970824212') && !newMember.bot) newMember.addRole('530109367970824212');
+export const run: typeof client.events.guildMemberUpdate = async (member, user): Promise<void> => {
+    if (!member.pending && !member.roles.includes(530109367970824212n) && !user.bot) client.helpers.addRole(member.guildId, member.id, 530109367970824212n);
 };

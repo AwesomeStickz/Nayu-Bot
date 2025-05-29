@@ -1,8 +1,7 @@
-import { Client, Message } from 'eris';
-import { run as messageEventRun } from './messageCreate';
+import { client } from '../nayu.js';
+import { Message } from '../utils/typings/ddTypings.js';
+import { run as messageEventRun } from './messageCreate.js';
 
-export const run = async (client: Client, oldMessage: Message, newMessage: Message) => {
-    if (oldMessage?.content === newMessage.content) return;
-
-    messageEventRun(client, newMessage);
+export const run: typeof client.events.messageUpdate = async (message): Promise<Message | void> => {
+    messageEventRun?.(message);
 };

@@ -1,44 +1,61 @@
+import { Collection } from '@discordeno/bot';
+import 'better-logger';
 import 'dotenv/config';
-import { Client, ClientEvents, Collection, DiscordRESTError } from 'eris';
-import fs from 'fs';
+import { readdir } from 'fs/promises';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { getClient } from './utils/getClient.js';
+import { CommandFile } from './utils/typings/commandFileInterfaces.js';
 
-export const client = new Client(process.env.BOT_TOKEN!, { intents: ['guildMembers', 'guildMessages', 'guilds'], allowedMentions: { everyone: false, roles: true, users: true }, messageLimit: 100 });
+export const client = getClient(process.env.BOT_TOKEN!);
 
-// @ts-expect-error
-export const commands: Collection = new Collection();
-// @ts-expect-error
-export const aliases: Collection = new Collection();
+export const commands: Collection<string, CommandFile> = new Collection();
+export const aliases: Collection<string, string> = new Collection();
+
+const __dirname = resolve(fileURLToPath(import.meta.url), '..');
 
 // Command handler
-fs.readdir('./commands/', (error, files) => {
-    if (error) return console.error(error);
-    files.forEach((file) => {
-        const props = require(`./commands/${file}`);
-        props.fileName = file;
-        commands.set(props.help?.name.toUpperCase(), props);
-        props.help?.aliases.forEach((alias: string) => {
+const loadCommands = async () => {
+    const files = await readdir(`${__dirname}/commands`);
+
+    for (const file of files) {
+        const props = await import(`./commands/${file}`);
+
+        commands.set(props.help.name.toUpperCase(), { ...props, fileName: file });
+
+        props.help.aliases.forEach((alias: string) => {
             aliases.set(alias.toUpperCase(), props.help.name.toUpperCase());
         });
-    });
+    }
+
     console.log(`[Commands]\tLoaded a total amount of ${files.length} commands`);
-});
+};
 
 // Event handler
-fs.readdir('./events/', (error, files) => {
-    if (error) return console.error(error);
-    files.forEach((file) => {
-        const eventFunction = require(`./events/${file}`);
-        eventFunction.run.bind(null, client);
+const loadEvents = async () => {
+    const files = await readdir(`${__dirname}/events`);
+
+    for (const file of files) {
+        const eventFile = await import(`./events/${file}`);
         const eventName = file.split('.')[0];
-        client.on(eventName as keyof ClientEvents, (...args) => eventFunction.run(client, ...args));
-    });
+
+        client.events[eventName as keyof typeof client.events] = eventFile.run;
+    }
+
     console.log(`[Events]\tLoaded a total amount of ${files.length} events`);
-});
+};
+
+console.log('Nayu is waking up!');
+
+loadCommands();
+loadEvents();
+
+client.start();
 
 process.on('unhandledRejection', (error) => {
-    if (error instanceof DiscordRESTError) return;
-
     console.error('Uncaught Promise Error: ', error);
 });
 
-client.connect();
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception: ', error);
+});

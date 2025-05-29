@@ -1,15 +1,20 @@
 {
     "name": "Nayu-Bot",
     "description": "A private discord bot made for doing stuff in Giveaway Boat's support server",
+    "type": "module",
     "version": "1.0.0",
-    "devDependencies": {
-        "@types/node": "^14.14.31"
-    },
     "dependencies": {
-        "dotenv": "^8.2.0",
-        "eris": "^0.17.1",
-        "tslib": "^2.1.0"
+        "better-logger": "github:AwesomeStickz/better-logger",
+        "dd-cache-proxy": "^2.6.2",
+        "dotenv": "^16.5.0"
     },
-    "license": "MIT",
-    "author": "Awesome Stickz"
+    "devDependencies": {
+        "@types/node": "^22.14.1"
+    },
+    "author": {
+        "name": "Awesome Stickz",
+        "email": "awesome@stickz.dev",
+        "url": "https://stickz.dev"
+    },
+    "license": "MIT"
 }
